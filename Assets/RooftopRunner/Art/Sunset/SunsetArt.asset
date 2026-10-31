@@ -1,0 +1,117 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c7558c1b1eb44c7886b441013a43963, type: 3}
+  m_Name: SunsetArt
+  m_EditorClassIdentifier: Assembly-CSharp::RooftopRunner.SunsetArt
+  sky: {fileID: 21300000, guid: b3caf6fa25468482e86b86f47300c11b, type: 3}
+  skyline: {fileID: 21300000, guid: e93a8e900e8524d0691d812ab746248f, type: 3}
+  facadeSheet: {fileID: 2800000, guid: bfe81d6b759334623b4e6494ce8ee383, type: 3}
+  propSheet: {fileID: 2800000, guid: 27019dbc276ad4b209a6b2156bc6691b, type: 3}
+  runnerSheet: {fileID: 2800000, guid: 18f434d7d18d4444fb99d7139bb75695, type: 3}
+  facadeRects:
+  - serializedVersion: 2
+    x: 65
+    y: 49
+    width: 425
+    height: 914
+  - serializedVersion: 2
+    x: 557
+    y: 49
+    width: 426
+    height: 914
+  - serializedVersion: 2
+    x: 1054
+    y: 49
+    width: 414
+    height: 914
+  propRects:
+  - serializedVersion: 2
+    x: 43
+    y: 453
+    width: 367
+    height: 372
+  - serializedVersion: 2
+    x: 461
+    y: 449
+    width: 413
+    height: 391
+  - serializedVersion: 2
+    x: 932
+    y: 438
+    width: 354
+    height: 353
+  - serializedVersion: 2
+    x: 1455
+    y: 454
+    width: 295
+    height: 348
+  - serializedVersion: 2
+    x: 16
+    y: 43
+    width: 477
+    height: 346
+  - serializedVersion: 2
+    x: 516
+    y: 39
+    width: 417
+    height: 370
+  - serializedVersion: 2
+    x: 946
+    y: 42
+    width: 369
+    height: 259
+  - serializedVersion: 2
+    x: 1370
+    y: 58
+    width: 371
+    height: 265
+  runnerRects:
+  - serializedVersion: 2
+    x: 23
+    y: 538
+    width: 361
+    height: 436
+  - serializedVersion: 2
+    x: 384
+    y: 537
+    width: 336
+    height: 442
+  - serializedVersion: 2
+    x: 784
+    y: 537
+    width: 368
+    height: 437
+  - serializedVersion: 2
+    x: 1152
+    y: 534
+    width: 319
+    height: 442
+  - serializedVersion: 2
+    x: 64
+    y: 56
+    width: 316
+    height: 303
+  - serializedVersion: 2
+    x: 445
+    y: 181
+    width: 298
+    height: 312
+  - serializedVersion: 2
+    x: 828
+    y: 99
+    width: 281
+    height: 377
+  - serializedVersion: 2
+    x: 1213
+    y: 50
+    width: 302
+    height: 312
