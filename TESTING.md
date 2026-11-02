@@ -92,3 +92,9 @@ Replaced the fixed 580-unit menu card and negative Home-button offset with propo
 ## User-supplied running and grunt — 3 November 2026
 
 Imported the two supplied MP3s and assigned them in the saved scene. Unity suite passed, including actual takeoff playing exactly one grunt, running playback pausing in the air, and rejected airborne input not repeating the grunt. Existing charge, landing, settings, wide menu bounds, fall, restart and route tests passed. Evidence: Validation/user-audio-results.txt. Phone listening and subjective loop/volume balance still require checking. No new APK was built.
+
+## Atmosphere transition — 3 November 2026
+
+Unity suite passed with new checks for sunset reset, halfway dusk, full night at 800 m, pause holding the transition, and Home reset. Existing sound, jump, menu bounds, missed-gap game over, restart, 2.5 km generation and 300 m traversal checks passed. Inspected rendered dusk and night screenshots: cloud detail, painted glowing windows, player, UI and roof edges remain visible. Evidence: Validation/atmosphere-results.txt, atmosphere-dusk.png and atmosphere-night.png. Screenshots use frozen player positions to inspect distant route sections; they are not landing tests.
+
+No new APK built. Android shader compilation, device appearance at low brightness, performance, and a full physical-phone night run remain manual checks. The shader is referenced through saved materials in SunsetArt so builds include it.

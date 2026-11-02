@@ -197,6 +197,23 @@ namespace RooftopRunner
             }
             Check(game.Distance >= 300 && jumps >= 10, "Physics-driven runner traverses 300 m with at least ten charged jumps");
             Check(feedback.LandingCount >= 10, "Repeated real jumps emit landing feedback");
+            game.StartRun(); game.runner.Freeze();
+            Check(game.atmosphere && game.atmosphere.NightAmount == 0, "Restart resets atmosphere to sunset");
+            game.runner.transform.position = new Vector3(450, .8f, 0); game.followCamera.Snap();
+            yield return null; yield return null;
+            Check(game.atmosphere.NightAmount > .4f && game.atmosphere.NightAmount < .6f, "Mid-run atmosphere reaches dusk");
+            if (SystemInfo.graphicsDeviceType != UnityEngine.Rendering.GraphicsDeviceType.Null)
+                yield return Capture(game, "/tmp/rooftop-dusk.png");
+            game.runner.transform.position = new Vector3(800, .8f, 0); game.followCamera.Snap();
+            yield return null; yield return null;
+            Check(Mathf.Approximately(game.atmosphere.NightAmount, 1), "Long run reaches full night");
+            if (SystemInfo.graphicsDeviceType != UnityEngine.Rendering.GraphicsDeviceType.Null)
+                yield return Capture(game, "/tmp/rooftop-night.png");
+            game.Pause(); float night = game.atmosphere.NightAmount;
+            yield return new WaitForSecondsRealtime(.1f);
+            Check(game.atmosphere.NightAmount == night, "Pause preserves atmosphere");
+            game.ReturnHome();
+            Check(game.atmosphere.NightAmount == 0, "Home resets atmosphere");
             game.StartRun(); game.runner.Freeze(); RestoreBest();
             Debug.Log("ROOFTOP_SMOKE_OK"); EditorApplication.Exit(0);
         }

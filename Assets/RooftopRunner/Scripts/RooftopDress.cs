@@ -35,10 +35,13 @@ namespace RooftopRunner
                 visual.color = Color.Lerp(Color.white, new Color(0.75f, 0.69f, 0.81f), (float)random.NextDouble() * 0.25f);
             }
         }
-        static SpriteRenderer Add(Transform parent, string name, Sprite sprite, Vector2 position, int order)
+        SpriteRenderer Add(Transform parent, string name, Sprite sprite, Vector2 position, int order)
         {
             var go = new GameObject(name); go.transform.SetParent(parent, false); go.transform.localPosition = position;
-            var renderer = go.AddComponent<SpriteRenderer>(); renderer.sprite = sprite; renderer.sortingOrder = order; return renderer;
+            var renderer = go.AddComponent<SpriteRenderer>(); renderer.sprite = sprite;
+            var material = order == 2 ? art.nightCityMaterial : art.nightPropMaterial;
+            if (material) renderer.sharedMaterial = material;
+            renderer.sortingOrder = order; return renderer;
         }
     }
 }

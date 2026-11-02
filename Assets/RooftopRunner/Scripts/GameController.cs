@@ -10,6 +10,7 @@ namespace RooftopRunner
         public FollowCamera followCamera;
         public RunnerUI ui;
         public RunFeedback feedback;
+        public CityAtmosphere atmosphere;
         public float fallHeight = -7;
         public RunState State { get; private set; }
         public int Distance { get; private set; }
@@ -24,6 +25,7 @@ namespace RooftopRunner
         void Prepare()
         {
             if (feedback) feedback.ResetRun();
+            if (atmosphere) atmosphere.ResetSunset();
             Time.timeScale = 1;
             Distance = 0; rooftops.ResetRoute();
             runner.ResetRunner(new Vector2(0, 0.8f)); runner.Freeze(); followCamera.Snap();

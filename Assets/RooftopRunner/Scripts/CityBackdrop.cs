@@ -34,7 +34,9 @@ namespace RooftopRunner
         Transform Shape(string label, Sprite sprite, Color color, int order)
         {
             var go = new GameObject(label); go.transform.SetParent(transform);
-            var renderer = go.AddComponent<SpriteRenderer>(); renderer.sprite = sprite; renderer.color = color; renderer.sortingOrder = order;
+            var renderer = go.AddComponent<SpriteRenderer>(); renderer.sprite = sprite;
+            if (art.nightSkyMaterial && art.nightCityMaterial) renderer.sharedMaterial = order == -40 ? art.nightSkyMaterial : art.nightCityMaterial;
+            renderer.color = color; renderer.sortingOrder = order;
             return go.transform;
         }
         void LateUpdate()

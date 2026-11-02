@@ -83,3 +83,9 @@ Added three footstep variations while grounded, a rising charge sound, a landing
 The sound update is in the project scene. Its APK build was not run because the build permission request was declined. Existing APKs do not contain these effects. Build Android from Unity using the setup instructions above.
 
 The project now uses your supplied Running.mp3 for grounded running and JumpGrunt.mp3 for successful takeoff. Both respect Sound Effects in Settings. Build a fresh Android APK to include these sounds and the Home button layout fix; existing APK files are unchanged.
+
+## Sunset to night (0.3.0)
+
+Each run begins at sunset. The atmosphere smoothly transitions after 100 m, reaches dusk at 450 m and full night at 800 m, then stays at night. Buildings and sky cool and darken while existing painted amber windows brighten. The runner, UI and rooftop edge markers retain their contrast. No music or gameplay difficulty changes are introduced.
+
+Select the GameController object and adjust CityAtmosphere's Sunset Until Distance and Full Night Distance in the Inspector. Pausing/game over holds the current atmosphere; restarting or returning Home resets it. Shared materials keep newly generated buildings synchronized without per-building light objects or image copies. Window glow is a color treatment of painted warm pixels, not dynamic lighting or bloom. Build a fresh Android APK to include this update.

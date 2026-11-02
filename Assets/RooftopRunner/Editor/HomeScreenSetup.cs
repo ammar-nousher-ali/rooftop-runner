@@ -15,8 +15,8 @@ public static class HomeScreenSetup
         EditorSceneManager.OpenScene(Scene);
         AddToScene(Object.FindFirstObjectByType<RunnerUI>());
         EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene());
-        PlayerSettings.bundleVersion = "0.2.1";
-        PlayerSettings.Android.bundleVersionCode = 4;
+        PlayerSettings.bundleVersion = "0.3.0";
+        PlayerSettings.Android.bundleVersionCode = 5;
         AssetDatabase.SaveAssets();
         Debug.Log("ROOFTOP_HOME_INSTALLED");
     }
@@ -24,6 +24,7 @@ public static class HomeScreenSetup
     public static void AddToScene(RunnerUI ui)
     {
         FeedbackSetup.AddToScene(ui.game);
+        AtmosphereSetup.AddToScene(ui.game);
         if (ui.home) Object.DestroyImmediate(ui.home.gameObject);
         if (ui.homeButton) Object.DestroyImmediate(ui.homeButton.gameObject);
         var root = Rect("Home Screen", ui.transform, 0, 0, 1, 1);

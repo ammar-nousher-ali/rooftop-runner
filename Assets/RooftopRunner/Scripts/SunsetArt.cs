@@ -6,6 +6,7 @@ namespace RooftopRunner
     public sealed class SunsetArt : ScriptableObject
     {
         public Sprite sky, skyline;
+        public Material nightSkyMaterial, nightCityMaterial, nightPropMaterial;
         public Texture2D facadeSheet, propSheet, runnerSheet;
         public Rect[] facadeRects, propRects, runnerRects;
         Sprite[] facades, props, frames;
