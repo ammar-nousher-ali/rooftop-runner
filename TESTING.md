@@ -50,3 +50,29 @@ Inspected rendered start-menu, gameplay and airborne-jump previews at 1280 × 72
 Evidence: `Validation/sunset-smoke-results.txt`, `Validation/sunset-menu.png`, `Validation/sunset-gameplay.png`, `Validation/sunset-jump.png`. The older images remain as the initial placeholder MVP record.
 
 The artwork is an MVP art pass. Character animation uses four run frames plus four state poses; it has not received production animation cleanup. The skyline is reused for the distant and near layers. Audio is not included. Android module installation, an APK build and physical-device input/performance testing are still pending, as described above.
+
+## Android APK with explicit game-over message
+
+Built `Builds/Android/RooftopRunner-GameOver.apk` successfully with Unity 6000.6.7f1, IL2CPP and ARM64. Build report: zero errors, one warning. Android's apksigner verified the APK signature. Manifest inspection confirmed `com.rooftoprunner.game`, minimum API 26 and target API 36. The actual APK is approximately 42 MiB; Unity's total build-output byte count includes additional output files and is not the APK file size.
+
+The existing fall-to-game-over transition now displays GAME OVER, a fall message, distance, best score and TRY AGAIN. The earlier APK remains unchanged. This APK has not been installed or played on a physical Android device during this update. Earlier notes about missing Android modules and no APK are historical and superseded by this build.
+
+## Launcher icon update — 1 November 2026
+
+Built `Builds/Android/RooftopRunner-NewIcon.apk` successfully (zero errors). Verified the APK signature with Android apksigner. Inspected the exported icon image and confirmed six density-specific background/foreground pairs plus the adaptive application icon in the packaged resource table. Project settings changes were limited to the default and Android icon assignments. The icon has not been checked on a physical phone launcher.
+
+## Missed-landing regression fix — 1 November 2026
+
+Reproduced the reported stuck-runner problem with two colliding buildings separated by a gap. Before the fix, the runner remained in Running at (7.69, 0.07) after 1.5 seconds, held against the landing wall by friction. The earlier test that moved the runner directly below the fall threshold did not exercise this failure mode.
+
+The runner now uses zero-friction collision material and records a missed landing when a frontal wall contact occurs with its feet below the roof surface. The controller ends the run on that contact or on the existing fall threshold. Reset clears the missed-landing flag.
+
+Verified the real-physics wall collision reaches GAME OVER, the overlay is visible, TRY AGAIN restarts and hides it, and a 300 m run with at least ten charged jumps still succeeds. The existing 2.5 km generation audit and pause/score tests passed. Rendered and inspected the game-over screen. Evidence: `Validation/fall-fix-results.txt` and `Validation/fall-gameover.png`. Device testing remains to be done.
+
+## Home screen — 1 November 2026
+
+Unity 6000.6.7f1 Play Mode checks passed in a separate project copy (`ROOFTOP_SMOKE_OK`). Verified home visibility and hidden gameplay HUD, disabled Chase Run, opening/closing settings, charge timing and reduced-motion changes, Free Run launch, and returning home from pause with time restored and runner frozen. The existing charge, pause/resume, score persistence, restart, real-physics missed-gap GAME OVER, 2.5 km roof geometry and 300 m charged-jump traversal checks passed again.
+
+Inspected 1280 × 720 Unity renders of the home screen and settings. Evidence: `Validation/home-screen.png`, `Validation/home-settings.png`, `Validation/home-screen-results.txt`. Controls use safe-area anchors, but physical Android touch, screen cutouts, unusual aspect ratios and performance still require device checks. Recommended manual flow: launch → Settings → change/reopen settings → Free Run → pause → Home → Free Run → miss a roof → GAME OVER → Home → Free Run. Confirm settings and best distance survive closing/reopening the app. Chase Run must remain disabled.
+
+Built `Builds/Android/RooftopRunner-v0.2.0-Home.apk` successfully: version 0.2.0 / versionCode 3, ARM64, minimum API 26, target API 36, approximately 44 MiB. Unity reported zero errors and one warning. Android apksigner verified its v2 signature; aapt confirmed package and version metadata. This APK has not been installed on a physical phone during this update.

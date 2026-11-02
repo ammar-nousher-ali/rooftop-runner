@@ -40,7 +40,7 @@ The HUD adapts to the device safe area. UI objects and references are saved in t
 6. Choose **Rooftop Runner → Build Android APK**. Output: `Builds/Android/RooftopRunner.apk`. Alternatively use **Build** in Build Profiles and choose an APK path.
 7. For **Build and Run**, connect an ARM64 Android phone by USB, enable Developer Options and USB debugging, and accept the device's authorization prompt. Select it as the run device. A local test build uses Unity's default debug signing; no custom keystore is required for testing.
 
-This Mac's Unity installation was inspected and has Mac/WebGL modules but **no Android Build Support**. An APK has not been built. Android SDK downloads, module installation and device authorization remain manual steps.
+Android Build Support, SDK/NDK and OpenJDK are now installed for Unity 6000.6.7f1. The updated APK is available at `Builds/Android/RooftopRunner-GameOver.apk`. It includes a GAME OVER message, distance, best score and TRY AGAIN after falling. The APK build and signature verification passed; physical-device testing remains manual.
 
 Unity's official dependency instructions: https://docs.unity.com/en-us/engine/6000.5/manual/platform-specific/android/getting-started/sdksetup/install-dependencies
 
@@ -57,3 +57,21 @@ The updated scene is the same `RooftopRunner.unity`; open it after Unity finishe
 `Assets/RooftopRunner/Art/Sunset/SunsetArt.asset` holds the sky, city texture and individual sprite regions from the sheets. `RunnerAnimator` selects poses using grounded state, charge and vertical velocity. `RooftopDress` adds non-colliding props and facade modules, while `CityBackdrop` handles the three scenery layers.
 
 Source sheets are retained. `runner-clean.png` is the character sheet used in-game; `runner.png` is the first source version. Texture CPU readability is disabled after import to avoid retaining extra runtime copies. Image generation prompts and production limitations are documented in `ART_DIRECTION.md`.
+
+## Updated launcher icon
+
+Latest APK: `Builds/Android/RooftopRunner-NewIcon.apk` (includes the GAME OVER screen). Original launcher artwork: `Assets/RooftopRunner/Art/Launcher/RooftopRunnerIcon.png`. The default application icon and all six Android adaptive-icon sizes are assigned. To reapply in an Android editor session, use **Rooftop Runner → Apply Launcher Icon**. Prompt and asset notes are in `Assets/RooftopRunner/Art/Launcher/ART_NOTES.md`.
+
+## Latest APK — version 0.1.1
+
+Install `Builds/Android/RooftopRunner-v0.1.1-FallFix.apk`. This build fixes the runner sticking to a building wall after missing a jump: side impacts below the roof now show GAME OVER, and the runner collider has no wall friction. It retains the new launcher icon. Android version code is 2, replacing the earlier version-code-1 builds. Build and signature verification passed; please verify the same missed jump on your phone.
+
+## Illustrated home screen (0.2.0)
+
+The opening screen now uses the supplied sunset concept with live UI: **Free Run**, a disabled **Chase Run — Coming Soon**, personal best distance, and **Settings**. Settings cycle between Quick/Normal/Relaxed jump-charge timing and Standard/Reduced camera motion; both save locally. Pause and game-over menus include **Home**. Chase gameplay is not implemented.
+
+Open `Assets/RooftopRunner/Scenes/RooftopRunner.unity` and press Play. If an older scene is already open in Unity, reload it from disk to see the updated screen. Use **Rooftop Runner > Install Home Screen** to regenerate only the home interface. The main scene generator also includes it when the home artwork exists. Artwork is under `Assets/RooftopRunner/Art/Home`; UI layout is created by `Editor/HomeScreenSetup.cs`, and behaviour by `Scripts/HomeScreen.cs`.
+
+Build on Apple Silicon using Unity 6000.6.7f1 with Android Build Support, SDK/NDK and OpenJDK installed through Unity Hub. In Build Profiles select Android, include the RooftopRunner scene, leave App Bundle off, and Build. The project targets ARM64 with IL2CPP. Install the resulting APK on an Android 8.0+ ARM64 device and allow installation from your chosen file-transfer app if prompted.
+
+Latest ready-to-install build: `Builds/Android/RooftopRunner-v0.2.0-Home.apk` (about 44 MiB). It includes the new home screen, launcher icon and missed-gap game-over fix. Earlier APKs remain available.

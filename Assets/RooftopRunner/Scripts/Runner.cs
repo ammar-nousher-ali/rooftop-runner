@@ -12,11 +12,13 @@ namespace RooftopRunner
         [Min(1)] public float gravity = 24f;
         public LayerMask roofMask = 1 << 6;
         public bool Grounded { get; private set; }
+        public bool MissedRoof { get; private set; }
         public bool Charging { get; private set; }
         public float Charge => Charging ? Mathf.Clamp01(held / chargeSeconds) : 0;
         public bool Active { get; set; }
         Rigidbody2D body;
         BoxCollider2D shape;
+        PhysicsMaterial2D frictionless;
         float held;
         bool jumpQueued;
         float queuedStrength;
@@ -26,6 +28,9 @@ namespace RooftopRunner
         {
             body = GetComponent<Rigidbody2D>();
             shape = GetComponent<BoxCollider2D>();
+            // Constant forward velocity must not generate enough wall friction to suspend a fall.
+            frictionless = new PhysicsMaterial2D("Runner frictionless") { friction = 0, bounciness = 0 };
+            shape.sharedMaterial = frictionless;
             body.gravityScale = gravity / Mathf.Abs(Physics2D.gravity.y);
             body.freezeRotation = true;
             body.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
@@ -70,13 +75,28 @@ namespace RooftopRunner
             Charging = false; held = 0;
         }
         public void CancelCharge() { Charging = false; held = 0; jumpQueued = false; }
+        void OnCollisionEnter2D(Collision2D collision) { CheckMissedRoof(collision); }
+        void OnCollisionStay2D(Collision2D collision) { CheckMissedRoof(collision); }
+        void CheckMissedRoof(Collision2D collision)
+        {
+            if (!Active || (roofMask.value & (1 << collision.gameObject.layer)) == 0) return;
+            // A frontal wall hit with the feet below its roof is a missed landing.
+            // Upward-facing roof contacts remain valid landings.
+            if (shape.bounds.min.y >= collision.collider.bounds.max.y - 0.08f) return;
+            for (int i = 0; i < collision.contactCount; i++)
+            {
+                if (collision.GetContact(i).normal.x >= -0.65f) continue;
+                MissedRoof = true; CancelCharge(); return;
+            }
+        }
         public void ResetRunner(Vector2 position)
         {
-            Active = false; CancelCharge(); Grounded = false;
+            Active = false; CancelCharge(); Grounded = false; MissedRoof = false;
             body.simulated = true; body.position = position; body.linearVelocity = Vector2.zero;
             transform.position = position;
         }
         public void Freeze() { Active = false; CancelCharge(); body.linearVelocity = Vector2.zero; body.simulated = false; }
+        void OnDestroy() { if (frictionless) Destroy(frictionless); }
         void OnValidate()
         {
             maximumJump = Mathf.Max(minimumJump, maximumJump);

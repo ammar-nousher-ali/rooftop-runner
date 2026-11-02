@@ -1,0 +1,22 @@
+SMOKE_PASS: Start screen
+SMOKE_PASS: Start UI visibility
+SMOKE_PASS: Runner lands on initial roof
+SMOKE_PASS: Animated runner artwork is assigned and rendered
+SMOKE_PASS: Painted rooftops and props instantiated
+SMOKE_PASS: Automatic running and distance score
+SMOKE_PASS: Short charge produces upward velocity
+SMOKE_PASS: Airborne charge rejected
+SMOKE_PASS: Charge clamps at maximum
+SMOKE_PASS: Longer hold increases jump strength
+SMOKE_PASS: Pause freezes simulation
+SMOKE_PASS: Resume restores play
+SMOKE_PASS: Pause cancels held charge
+SMOKE_PASS: Falling ends run
+SMOKE_PASS: Best score persisted locally
+SMOKE_PASS: Restart resets score and route
+WALL_REGRESSION: state=GameOver position=(7.69, 0.14)
+SMOKE_PASS: Missed gap hitting a building side shows GAME OVER promptly
+SMOKE_PASS: TRY AGAIN after a wall miss resets the runner and hides GAME OVER
+SMOKE_PASS: 2.5 km of generated roofs satisfy reach margin and bounded object count
+SMOKE_PASS: Physics-driven runner traverses 300 m with at least ten charged jumps
+ROOFTOP_SMOKE_OK

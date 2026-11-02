@@ -42,12 +42,28 @@ namespace RooftopRunner
             yield return null;
             var game = FindFirstObjectByType<GameController>();
             Check(game && game.State == GameController.RunState.Start, "Start screen");
-            Check(game.ui.overlay.activeSelf && !game.ui.jumpButton.activeSelf, "Start UI visibility");
+            Check(game.ui.home && game.ui.home.gameObject.activeSelf && !game.ui.safeArea.gameObject.activeSelf, "Home visible and gameplay HUD hidden");
+            var home = game.ui.home;
+            Check(!home.chaseRun.interactable, "Chase Run is Coming Soon and disabled");
+            home.settings.onClick.Invoke();
+            Check(home.settingsPanel.activeSelf, "Settings opens");
+            float oldCharge = game.runner.chargeSeconds;
+            home.chargeSetting.onClick.Invoke();
+            Check(game.runner.chargeSeconds != oldCharge, "Charge setting updates gameplay");
+            home.chargeSetting.onClick.Invoke(); home.chargeSetting.onClick.Invoke();
+            bool oldMotion = game.followCamera.reducedMotion;
+            home.motionSetting.onClick.Invoke();
+            Check(game.followCamera.reducedMotion != oldMotion, "Reduced motion setting updates camera");
+            home.motionSetting.onClick.Invoke();
+            if (SystemInfo.graphicsDeviceType != UnityEngine.Rendering.GraphicsDeviceType.Null)
+                yield return Capture(game, "/tmp/rooftop-settings.png");
+            home.closeSettings.onClick.Invoke();
+            Check(!home.settingsPanel.activeSelf, "Settings closes");
             if (SystemInfo.graphicsDeviceType != UnityEngine.Rendering.GraphicsDeviceType.Null)
             {
                 yield return Capture(game, "/tmp/rooftop-menu.png");
             }
-            game.StartRun(); yield return new WaitForSeconds(0.2f);
+            game.ui.home.freeRun.onClick.Invoke(); yield return new WaitForSeconds(0.2f);
             Check(game.runner.Grounded, "Runner lands on initial roof");
             var animation = game.runner.GetComponent<RunnerAnimator>();
             Check(animation && animation.art && animation.illustration.sprite, "Animated runner artwork is assigned and rendered");
@@ -69,13 +85,16 @@ namespace RooftopRunner
             Check(shortSpeed > 3, "Short charge produces upward velocity");
             game.BeginCharge(); Check(!game.runner.Charging, "Airborne charge rejected");
             game.StartRun(); yield return new WaitForSeconds(0.2f);
-            game.BeginCharge(); yield return new WaitForSeconds(0.8f);
+            game.BeginCharge(); yield return new WaitForSeconds(game.runner.chargeSeconds + 0.15f);
             Check(Mathf.Approximately(game.runner.Charge, 1), "Charge clamps at maximum");
             game.ReleaseCharge(); yield return new WaitForFixedUpdate(); yield return new WaitForFixedUpdate();
             Check(game.runner.GetComponent<Rigidbody2D>().linearVelocity.y > shortSpeed + 2, "Longer hold increases jump strength");
             game.Pause(); Vector2 pausedPosition = game.runner.GetComponent<Rigidbody2D>().position;
             yield return new WaitForSecondsRealtime(0.15f);
             Check(game.State == GameController.RunState.Paused && game.runner.GetComponent<Rigidbody2D>().position == pausedPosition && Time.timeScale == 0, "Pause freezes simulation");
+            game.ui.homeButton.onClick.Invoke();
+            Check(game.State == GameController.RunState.Start && home.gameObject.activeSelf && Time.timeScale == 1 && !game.runner.Active, "Home from pause resets time and freezes runner");
+            home.freeRun.onClick.Invoke(); game.Pause();
             game.Resume(); Check(Time.timeScale == 1 && game.State == GameController.RunState.Running, "Resume restores play");
             game.StartRun(); yield return new WaitForSeconds(0.2f);
             game.BeginCharge(); game.Pause(); Check(!game.runner.Charging, "Pause cancels held charge"); game.Resume();
@@ -86,6 +105,26 @@ namespace RooftopRunner
             Check(PlayerPrefs.GetInt("RooftopRunner.BestDistance") >= game.Distance, "Best score persisted locally");
             game.StartRun(); yield return new WaitForSeconds(0.1f);
             Check(game.Distance < 3 && game.State == GameController.RunState.Running && game.rooftops.RoofCount < 12, "Restart resets score and route");
+            // Reproduce the phone report using real physics: run off a roof into the next wall.
+            game.rooftops.enabled = false;
+            foreach (Transform roof in game.rooftops.transform) roof.gameObject.SetActive(false);
+            var takeoff = new GameObject("Regression takeoff"); takeoff.layer = 6;
+            takeoff.transform.position = new Vector3(0, -9, 0);
+            takeoff.AddComponent<BoxCollider2D>().size = new Vector2(12, 18);
+            var wall = new GameObject("Regression landing wall"); wall.layer = 6;
+            wall.transform.position = new Vector3(14, -9, 0);
+            wall.AddComponent<BoxCollider2D>().size = new Vector2(12, 18);
+            game.runner.ResetRunner(new Vector2(5, 0.7f)); game.runner.Active = true;
+            float failDeadline = Time.time + 1.5f;
+            while (game.State == GameController.RunState.Running && Time.time < failDeadline) yield return new WaitForFixedUpdate();
+            Debug.Log("WALL_REGRESSION: state=" + game.State + " position=" + game.runner.GetComponent<Rigidbody2D>().position);
+            Check(game.State == GameController.RunState.GameOver && game.ui.overlay.activeSelf && game.ui.title.text == "GAME OVER", "Missed gap hitting a building side shows GAME OVER promptly");
+            if (SystemInfo.graphicsDeviceType != UnityEngine.Rendering.GraphicsDeviceType.Null)
+                yield return Capture(game, "/tmp/rooftop-fall-gameover.png");
+            takeoff.SetActive(false); wall.SetActive(false); Destroy(takeoff); Destroy(wall);
+            game.rooftops.enabled = true;
+            game.ui.primaryButton.onClick.Invoke(); yield return new WaitForSeconds(0.2f);
+            Check(game.State == GameController.RunState.Running && game.runner.Grounded && !game.ui.overlay.activeSelf, "TRY AGAIN after a wall miss resets the runner and hides GAME OVER");
             // Audit actual generated roof geometry over a long route, including recycling.
             game.runner.Active = false;
             game.runner.GetComponent<Rigidbody2D>().simulated = false;

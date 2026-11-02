@@ -91,6 +91,7 @@ public static class RooftopRunnerSetup
         ui.primaryButton = Button("Primary", content, "START RUN", new Vector2(0.5f, 0), new Vector2(-180, 70), new Vector2(180, 135), new Color(1, 0.67f, 0.28f), ink);
         ui.primaryLabel = ui.primaryButton.GetComponentInChildren<Text>();
         ui.restartButton = Button("Restart", content, "RESTART RUN", new Vector2(0.5f, 0), new Vector2(-150, 7), new Vector2(150, 57), new Color(0.16f, 0.21f, 0.3f), cream);
+        if (File.Exists("Assets/RooftopRunner/Art/Home/HomeBackground.png")) HomeScreenSetup.AddToScene(ui);
         EditorSceneManager.SaveScene(scene, ScenePath);
         EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene(ScenePath, true) };
         PlayerSettings.companyName = "RooftopRunner"; PlayerSettings.productName = "Rooftop Runner";

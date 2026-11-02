@@ -31,12 +31,17 @@ namespace RooftopRunner
             Prepare(); runner.ResetRunner(new Vector2(0, 0.8f)); runner.Active = true;
             State = RunState.Running; ui.Refresh();
         }
+        public void ReturnHome()
+        {
+            SaveBest(); Prepare(); State = RunState.Start; ui.Refresh();
+        }
         void Update()
         {
             var keyboard = Keyboard.current;
             if (keyboard != null && (keyboard.escapeKey.wasPressedThisFrame || keyboard.pKey.wasPressedThisFrame))
             {
                 if (State == RunState.Running) Pause(); else if (State == RunState.Paused) Resume();
+                else if (State == RunState.Start && ui.home) ui.home.CloseSettingsIfOpen();
             }
             if (State != RunState.Running) return;
             if (keyboard != null)
@@ -45,7 +50,7 @@ namespace RooftopRunner
                 if (keyboard.spaceKey.wasReleasedThisFrame) ReleaseCharge();
             }
             Distance = Mathf.Max(Distance, Mathf.FloorToInt(runner.transform.position.x));
-            if (runner.transform.position.y < fallHeight) EndRun();
+            if (runner.MissedRoof || runner.transform.position.y < fallHeight) EndRun();
         }
         public void BeginCharge() { if (State == RunState.Running) runner.BeginCharge(); }
         public void ReleaseCharge() { if (State == RunState.Running) runner.ReleaseCharge(); }

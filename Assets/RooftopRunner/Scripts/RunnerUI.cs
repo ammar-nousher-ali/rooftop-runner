@@ -6,6 +6,8 @@ namespace RooftopRunner
     public sealed class RunnerUI : MonoBehaviour
     {
         public GameController game;
+        public HomeScreen home;
+        public Button homeButton;
         public Text distanceText, bestText, title, subtitle, primaryLabel;
         public GameObject overlay, pauseButton, jumpButton, powerGroup;
         public Image chargeFill;
@@ -32,7 +34,11 @@ namespace RooftopRunner
         public void Refresh()
         {
             bool running = game.State == GameController.RunState.Running;
-            overlay.SetActive(!running); pauseButton.SetActive(running); jumpButton.SetActive(running); if (powerGroup) powerGroup.SetActive(running);
+            bool atHome = game.State == GameController.RunState.Start && home;
+            if (home) home.gameObject.SetActive(atHome);
+            safeArea.gameObject.SetActive(!atHome);
+            if (homeButton) { homeButton.gameObject.SetActive(!atHome && !running); homeButton.onClick.RemoveAllListeners(); homeButton.onClick.AddListener(game.ReturnHome); }
+            overlay.SetActive(!running && !atHome); pauseButton.SetActive(running); jumpButton.SetActive(running); if (powerGroup) powerGroup.SetActive(running);
             primaryButton.onClick.RemoveAllListeners(); restartButton.onClick.RemoveAllListeners();
             restartButton.gameObject.SetActive(game.State == GameController.RunState.Paused);
             if (game.State == GameController.RunState.Start)
@@ -50,9 +56,9 @@ namespace RooftopRunner
             }
             else if (game.State == GameController.RunState.GameOver)
             {
-                title.text = "ONE MORE\nROOFTOP?";
-                subtitle.text = "RUN COMPLETE  /  " + game.Distance + " m\nBEST  /  " + game.Best + " m\n\nCharge before the edge. Release while grounded.";
-                primaryLabel.text = "RUN AGAIN"; primaryButton.onClick.AddListener(game.StartRun);
+                title.text = "GAME OVER";
+                subtitle.text = "You fell between the rooftops!\n\nDISTANCE  /  " + game.Distance + " m\nBEST  /  " + game.Best + " m";
+                primaryLabel.text = "TRY AGAIN"; primaryButton.onClick.AddListener(game.StartRun);
             }
         }
     }
