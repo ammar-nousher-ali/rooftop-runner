@@ -1,0 +1,44 @@
+SMOKE_PASS: Start screen
+SMOKE_PASS: Home visible and gameplay HUD hidden
+SMOKE_PASS: All sound clips assigned
+SMOKE_PASS: Sound and vibration toggles persist independently
+SMOKE_PASS: Chase Run is Coming Soon and disabled
+SMOKE_PASS: Settings opens
+SMOKE_PASS: Charge setting updates gameplay
+SMOKE_PASS: Reduced motion setting updates camera
+SMOKE_PASS: Settings closes
+SMOKE_PASS: Runner lands on initial roof
+SMOKE_PASS: Animated runner artwork is assigned and rendered
+SMOKE_PASS: Painted rooftops and props instantiated
+SMOKE_PASS: Grounded running emits footsteps
+SMOKE_PASS: Automatic running and distance score
+SMOKE_PASS: Short charge produces upward velocity
+SMOKE_PASS: Actual takeoff plays one grunt and pauses running audio
+SMOKE_PASS: Airborne input does not play another grunt
+SMOKE_PASS: Charge tone starts while held
+SMOKE_PASS: Charge tone pitch rises with power
+SMOKE_PASS: Charge clamps at maximum
+SMOKE_PASS: Longer hold increases jump strength
+SMOKE_PASS: Release stops charge tone
+SMOKE_PASS: Pause freezes simulation
+SMOKE_PASS: Home button corner inside safe area at 1600x720
+SMOKE_PASS: Home button corner inside safe area at 1600x720
+SMOKE_PASS: Home button corner inside safe area at 1600x720
+SMOKE_PASS: Home button corner inside safe area at 1600x720
+SMOKE_PASS: Home from pause resets time and freezes runner
+SMOKE_PASS: Resume restores play
+SMOKE_PASS: Pause cancels held charge
+SMOKE_PASS: Falling ends run
+SMOKE_PASS: Failure feedback fires once and stops charge audio
+SMOKE_PASS: Best score persisted locally
+SMOKE_PASS: Restart resets score and route
+SMOKE_PASS: Missed gap hitting a building side shows GAME OVER promptly
+SMOKE_PASS: Home button corner inside safe area at 1600x720
+SMOKE_PASS: Home button corner inside safe area at 1600x720
+SMOKE_PASS: Home button corner inside safe area at 1600x720
+SMOKE_PASS: Home button corner inside safe area at 1600x720
+SMOKE_PASS: TRY AGAIN after a wall miss resets the runner and hides GAME OVER
+SMOKE_PASS: 2.5 km of generated roofs satisfy reach margin and bounded object count
+SMOKE_PASS: Physics-driven runner traverses 300 m with at least ten charged jumps
+SMOKE_PASS: Repeated real jumps emit landing feedback
+ROOFTOP_SMOKE_OK

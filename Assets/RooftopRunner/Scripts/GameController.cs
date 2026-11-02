@@ -9,6 +9,7 @@ namespace RooftopRunner
         public RooftopGenerator rooftops;
         public FollowCamera followCamera;
         public RunnerUI ui;
+        public RunFeedback feedback;
         public float fallHeight = -7;
         public RunState State { get; private set; }
         public int Distance { get; private set; }
@@ -22,6 +23,7 @@ namespace RooftopRunner
         }
         void Prepare()
         {
+            if (feedback) feedback.ResetRun();
             Time.timeScale = 1;
             Distance = 0; rooftops.ResetRoute();
             runner.ResetRunner(new Vector2(0, 0.8f)); runner.Freeze(); followCamera.Snap();
@@ -58,7 +60,7 @@ namespace RooftopRunner
         public void Pause()
         {
             if (State != RunState.Running) return;
-            CancelCharge(); SaveBest(); State = RunState.Paused; Time.timeScale = 0; ui.Refresh();
+            CancelCharge(); if (feedback) feedback.StopAudio(); SaveBest(); State = RunState.Paused; Time.timeScale = 0; ui.Refresh();
         }
         public void Resume()
         {
@@ -68,6 +70,7 @@ namespace RooftopRunner
         void EndRun()
         {
             SaveBest(); runner.Freeze(); State = RunState.GameOver; ui.Refresh();
+            if (feedback) feedback.Fail();
         }
         void SaveBest()
         {

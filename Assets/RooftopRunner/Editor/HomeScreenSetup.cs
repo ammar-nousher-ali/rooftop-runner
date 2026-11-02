@@ -15,14 +15,15 @@ public static class HomeScreenSetup
         EditorSceneManager.OpenScene(Scene);
         AddToScene(Object.FindFirstObjectByType<RunnerUI>());
         EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene());
-        PlayerSettings.bundleVersion = "0.2.0";
-        PlayerSettings.Android.bundleVersionCode = 3;
+        PlayerSettings.bundleVersion = "0.2.1";
+        PlayerSettings.Android.bundleVersionCode = 4;
         AssetDatabase.SaveAssets();
         Debug.Log("ROOFTOP_HOME_INSTALLED");
     }
     public static void InstallAndTest() { Install(); SmokeChecks.Run(); }
     public static void AddToScene(RunnerUI ui)
     {
+        FeedbackSetup.AddToScene(ui.game);
         if (ui.home) Object.DestroyImmediate(ui.home.gameObject);
         if (ui.homeButton) Object.DestroyImmediate(ui.homeButton.gameObject);
         var root = Rect("Home Screen", ui.transform, 0, 0, 1, 1);
@@ -50,21 +51,26 @@ public static class HomeScreenSetup
         var modal = Rect("Settings Overlay", safe, 0,0,1,1);
         modal.gameObject.AddComponent<Image>().color = new Color(.03f,.02f,.08f,.88f);
         home.settingsPanel = modal.gameObject;
-        var panel = Rect("Settings Card", modal, .23f,.19f,.77f,.81f);
+        var panel = Rect("Settings Card", modal, .23f,.10f,.77f,.90f);
         panel.gameObject.AddComponent<Image>().color = new Color(.12f,.09f,.20f);
-        Label("Title", panel, "SETTINGS", 36, .05f,.78f,.95f,.96f);
-        home.chargeSetting = Button("Charge setting", panel, "", new Color(.25f,.18f,.27f), .08f,.53f,.92f,.71f, 21);
+        Label("Title", panel, "SETTINGS", 36, .05f,.84f,.95f,.98f);
+        home.chargeSetting = Button("Charge setting", panel, "", new Color(.25f,.18f,.27f), .08f,.66f,.92f,.80f, 21);
         home.chargeLabel = home.chargeSetting.GetComponentInChildren<Text>();
-        home.motionSetting = Button("Motion setting", panel, "", new Color(.25f,.18f,.27f), .08f,.31f,.92f,.49f, 21);
+        home.motionSetting = Button("Motion setting", panel, "", new Color(.25f,.18f,.27f), .08f,.50f,.92f,.64f, 21);
         home.motionLabel = home.motionSetting.GetComponentInChildren<Text>();
-        Label("Hint", panel, "Tap a setting to change it. Saved on this device.", 16, .05f,.21f,.95f,.30f);
-        home.closeSettings = Button("Back", panel, "BACK", new Color(.88f,.48f,.12f), .32f,.04f,.68f,.19f, 23);
+        home.soundSetting = Button("Sound effects", panel, "", new Color(.25f,.18f,.27f), .08f,.34f,.92f,.48f, 21);
+        home.soundLabel = home.soundSetting.GetComponentInChildren<Text>();
+        home.hapticsSetting = Button("Failure vibration", panel, "", new Color(.25f,.18f,.27f), .08f,.18f,.92f,.32f, 21);
+        home.hapticsLabel = home.hapticsSetting.GetComponentInChildren<Text>();
+        Label("Hint", panel, "Tap a setting to change it. Saved on this device.", 16, .05f,.12f,.95f,.18f);
+        home.closeSettings = Button("Back", panel, "BACK", new Color(.88f,.48f,.12f), .32f,.01f,.68f,.11f, 23);
         modal.gameObject.SetActive(false);
         var content = ui.primaryButton.transform.parent;
         ui.homeButton = Button("Home", content, "HOME", new Color(.16f,.18f,.27f), .5f,0,.5f,0, 20);
         var hr = (RectTransform)ui.homeButton.transform;
         hr.offsetMin = new Vector2(-100,-48); hr.offsetMax = new Vector2(100,-4);
         ui.homeButton.gameObject.SetActive(false);
+        ui.LayoutMenu();
     }
     static Sprite Import(string name)
     {

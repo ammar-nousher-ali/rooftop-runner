@@ -75,3 +75,11 @@ Open `Assets/RooftopRunner/Scenes/RooftopRunner.unity` and press Play. If an old
 Build on Apple Silicon using Unity 6000.6.7f1 with Android Build Support, SDK/NDK and OpenJDK installed through Unity Hub. In Build Profiles select Android, include the RooftopRunner scene, leave App Bundle off, and Build. The project targets ARM64 with IL2CPP. Install the resulting APK on an Android 8.0+ ARM64 device and allow installation from your chosen file-transfer app if prompted.
 
 Latest ready-to-install build: `Builds/Android/RooftopRunner-v0.2.0-Home.apk` (about 44 MiB). It includes the new home screen, launcher icon and missed-gap game-over fix. Earlier APKs remain available.
+
+## Sound and haptics (0.2.1)
+
+Added three footstep variations while grounded, a rising charge sound, a landing impact, and a short Android failure vibration. **No music.** Settings has independently saved Sound Effects and Failure Vibration switches, both enabled by default. Effects stop on pause, home, failure and loss of focus. `RunFeedback` on GameController exposes volume, footstep interval and vibration duration in the Inspector; WAV assets are under `Assets/RooftopRunner/Audio`. Android vibration permission is merged from `Assets/Plugins/Android/RooftopHaptics.androidlib`.
+
+The sound update is in the project scene. Its APK build was not run because the build permission request was declined. Existing APKs do not contain these effects. Build Android from Unity using the setup instructions above.
+
+The project now uses your supplied Running.mp3 for grounded running and JumpGrunt.mp3 for successful takeoff. Both respect Sound Effects in Settings. Build a fresh Android APK to include these sounds and the Home button layout fix; existing APK files are unchanged.

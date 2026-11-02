@@ -8,7 +8,8 @@ namespace RooftopRunner
         public GameController game;
         public RectTransform safeContent;
         public GameObject settingsPanel;
-        public Text bestLabel, chargeLabel, motionLabel;
+        public Text bestLabel, chargeLabel, motionLabel, soundLabel, hapticsLabel;
+        public Button soundSetting, hapticsSetting;
         public Button freeRun, chaseRun, settings, closeSettings, chargeSetting, motionSetting;
         readonly float[] chargeTimes = { 0.45f, 0.65f, 0.9f };
         readonly string[] chargeNames = { "QUICK", "NORMAL", "RELAXED" };
@@ -26,7 +27,9 @@ namespace RooftopRunner
             closeSettings.onClick.AddListener(CloseSettings);
             chargeSetting.onClick.AddListener(CycleCharge);
             motionSetting.onClick.AddListener(ToggleMotion);
-            ApplySettings();
+            if (soundSetting) soundSetting.onClick.AddListener(() => { game.feedback.SetSound(!game.feedback.SoundEnabled); RefreshFeedbackLabels(); });
+            if (hapticsSetting) hapticsSetting.onClick.AddListener(() => { game.feedback.SetHaptics(!game.feedback.HapticsEnabled); RefreshFeedbackLabels(); });
+            ApplySettings(); RefreshFeedbackLabels();
         }
         void OnEnable()
         {
@@ -58,6 +61,12 @@ namespace RooftopRunner
             PlayerPrefs.SetInt("RooftopRunner.ChargeMode", chargeMode);
             PlayerPrefs.SetInt("RooftopRunner.ReducedMotion", reducedMotion ? 1 : 0);
             PlayerPrefs.Save();
+        }
+        void RefreshFeedbackLabels()
+        {
+            if (!game.feedback) return;
+            if (soundLabel) soundLabel.text = "SOUND EFFECTS     " + (game.feedback.SoundEnabled ? "ON" : "OFF");
+            if (hapticsLabel) hapticsLabel.text = "FAILURE VIBRATION     " + (game.feedback.HapticsEnabled ? "ON" : "OFF");
         }
         void ApplySettings()
         {

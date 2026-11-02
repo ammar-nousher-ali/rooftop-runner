@@ -19,6 +19,7 @@ namespace RooftopRunner
         Rigidbody2D body;
         BoxCollider2D shape;
         PhysicsMaterial2D frictionless;
+        public event System.Action Jumped;
         float held;
         bool jumpQueued;
         float queuedStrength;
@@ -56,7 +57,7 @@ namespace RooftopRunner
             velocity.x = speed;
             if (jumpQueued)
             {
-                if (Grounded) { velocity.y = queuedStrength; Grounded = false; }
+                if (Grounded) { velocity.y = queuedStrength; Grounded = false; Jumped?.Invoke(); }
                 jumpQueued = false;
             }
             body.linearVelocity = velocity;

@@ -76,3 +76,19 @@ Unity 6000.6.7f1 Play Mode checks passed in a separate project copy (`ROOFTOP_SM
 Inspected 1280 × 720 Unity renders of the home screen and settings. Evidence: `Validation/home-screen.png`, `Validation/home-settings.png`, `Validation/home-screen-results.txt`. Controls use safe-area anchors, but physical Android touch, screen cutouts, unusual aspect ratios and performance still require device checks. Recommended manual flow: launch → Settings → change/reopen settings → Free Run → pause → Home → Free Run → miss a roof → GAME OVER → Home → Free Run. Confirm settings and best distance survive closing/reopening the app. Chase Run must remain disabled.
 
 Built `Builds/Android/RooftopRunner-v0.2.0-Home.apk` successfully: version 0.2.0 / versionCode 3, ARM64, minimum API 26, target API 36, approximately 44 MiB. Unity reported zero errors and one warning. Android apksigner verified its v2 signature; aapt confirmed package and version metadata. This APK has not been installed on a physical phone during this update.
+
+## Sound and haptics — 2 November 2026
+
+Unity Play Mode suite passed (`Validation/audio-results.txt`): effect clip assignments, persisted sound/vibration switches, footsteps while grounded, charge playback and increasing pitch, stopping on release, one failure-feedback dispatch, and landing feedback across at least ten real jumps. Existing home, pause, charge, fall/wall game-over, restart, 2.5 km geometry and 300 m traversal checks also passed. Inspected the expanded Settings render (`Validation/audio-settings.png`).
+
+These checks establish playback state and event timing, not subjective sound quality. Manual Android checks remain: listen on speaker/headphones, confirm no footsteps in flight, charge stops on release/pause, one short vibration on a missed roof, switches work independently and survive app restart, and returning from background stays paused. Vibration requires device hardware and may be affected by system preferences. No music was added.
+
+APK build permission was declined, so Android compilation, manifest merging and physical-device vibration are unverified for this update. Previously built APKs are unchanged.
+
+## Home button clipping fix — 2 November 2026
+
+Replaced the fixed 580-unit menu card and negative Home-button offset with proportional anchors inside the safe area. Pause has three separated buttons; game over moves Home directly below Try Again. Text scales within its allocated space. Checked 1600 × 720 pause/game-over renders and asserted all four Home-button corners fall inside the safe area in both states. Full gameplay and sound regression suite passed. Evidence: `Validation/pause-wide-fixed.png`, `Validation/gameover-wide-fixed.png`, `Validation/menu-layout-results.txt`. Changes are in the project scene and runtime layout; no new APK was built in this update. Physical phone verification remains.
+
+## User-supplied running and grunt — 3 November 2026
+
+Imported the two supplied MP3s and assigned them in the saved scene. Unity suite passed, including actual takeoff playing exactly one grunt, running playback pausing in the air, and rejected airborne input not repeating the grunt. Existing charge, landing, settings, wide menu bounds, fall, restart and route tests passed. Evidence: Validation/user-audio-results.txt. Phone listening and subjective loop/volume balance still require checking. No new APK was built.
